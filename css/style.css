@@ -1,0 +1,314 @@
+/* Custom CSS Variables Hierarchy */
+:root {
+    --bg-sky: #e0f4ff;
+    --bg-card: #ffffff;
+    --text-main: #2b2b2b;
+    --primary: #4caf50;
+    --secondary: #ff9800;
+    --accent: #e91e63;
+    --canvas-bg: #fcfcfc;
+    --border-radius: 24px;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --transition-speed: 0.3s;
+}
+
+[data-theme="dark"] {
+    --bg-sky: #1a2639;
+    --bg-card: #25334a;
+    --text-main: #f0f4f8;
+    --primary: #66bb6a;
+    --secondary: #ffa726;
+    --canvas-bg: #1e293b;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--bg-sky);
+    color: var(--text-main);
+    overflow-x: hidden;
+    transition: background-color var(--transition-speed);
+    min-height: 100vh;
+}
+
+/* Background Atmospheric Engine */
+.sky-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.cloud {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 100px;
+    animation: floatClouds 40s linear infinite;
+}
+.cloud-1 { width: 200px; height: 60px; top: 10%; left: -200px; }
+.cloud-2 { width: 140px; height: 45px; top: 25%; left: -150px; animation-delay: 15s; }
+
+@keyframes floatClouds {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(100vw + 300px)); }
+}
+
+/* Header & Stat Configurations */
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--bg-card);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.05);
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stats-bar {
+    display: flex;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.04);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+}
+
+.stat-item {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* View Lifecycle Framework */
+.view {
+    display: none;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeIn var(--transition-speed) ease-in-out;
+}
+
+.view.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom Component Layouts */
+.hero-section {
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.mascot-container {
+    display: inline-block;
+    margin-bottom: 2rem;
+}
+
+.mascot-teacher {
+    font-size: 4.5rem;
+    animation: bounce 2s infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-15px); }
+}
+
+.bubble-speech {
+    background: var(--bg-card);
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+    margin-top: 10px;
+}
+
+.action-cards {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.card-btn {
+    background: var(--bg-card);
+    border: 4px solid var(--primary);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    cursor: pointer;
+    width: 260px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+/* Learning Engine Grid */
+.fidel-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.fidel-card {
+    background: var(--bg-card);
+    border: 3px solid transparent;
+    border-radius: 16px;
+    padding: 1.5rem 1rem;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+}
+
+.fidel-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--secondary);
+    background: var(--bg-sky);
+}
+
+/* Details and Tracing Canvas Component Layer */
+.details-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .details-layout { grid-template-columns: 1fr; }
+}
+
+.detail-card, .canvas-card {
+    background: var(--bg-card);
+    border-radius: var(--border-radius);
+    padding: 2.5rem;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.large-fidel {
+    font-size: 6rem;
+    font-weight: bold;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.canvas-wrapper {
+    background: var(--canvas-bg);
+    border: 4px dashed var(--secondary);
+    border-radius: 16px;
+    display: inline-block;
+    margin: 1.5rem 0;
+    touch-action: none; /* Disables standard scrolling gestures when drawing */
+}
+
+canvas {
+    display: block;
+    cursor: crosshair;
+}
+
+/* Global Buttons & Inputs Configuration */
+.btn-primary, .btn-action, .btn-secondary {
+    padding: 0.8rem 1.8rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: filter 0.2s;
+    margin: 0.25rem;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-secondary { background: rgba(0,0,0,0.1); color: var(--text-main); }
+.btn-action { background: var(--secondary); color: white; }
+button:hover { filter: brightness(0.9); }
+
+/* Interactive Quiz Styling Configurations */
+.quiz-container {
+    background: var(--bg-card);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.quiz-audio-prompt {
+    background: var(--bg-sky);
+    padding: 2rem;
+    font-size: 2.5rem;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem auto;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.quiz-option {
+    background: var(--canvas-bg);
+    border: 3px solid rgba(0,0,0,0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.quiz-option:hover { background: var(--bg-sky); transform: scale(1.02); }
+
+/* Overlays and Toasts Systems */
+.overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+.hidden { display: none !important; }
+.celebration-modal {
+    background: var(--bg-card);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+}
+.reward-graphic { font-size: 5rem; margin: 1.5rem 0; animation: bounce 1s infinite alternate; }
