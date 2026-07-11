@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="am" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fidel Kids - Amharic Letter Learning</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="sky-background">
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="rainbow"></div>
+    </div>
+
+    <header class="app-header">
+        <div class="brand">
+            <span class="mascot-icon">🦁</span>
+            <h1>ፊደል Kids</h1>
+        </div>
+        <div class="stats-bar">
+            <div class="stat-item" title="Streak">🔥 <span id="stat-streak">0</span></div>
+            <div class="stat-item" title="Coins">🪙 <span id="stat-coins">0</span></div>
+            <div class="stat-item" title="Stars">⭐ <span id="stat-stars">0</span></div>
+            <div class="stat-item" title="Lives">❤️ <span id="stat-lives">3</span></div>
+        </div>
+        <button id="theme-toggle" class="btn-icon" aria-label="Toggle Theme">🌓</button>
+    </header>
+
+    <main id="main-container">
+        <section id="view-home" class="view active">
+            <div class="hero-section">
+                <div class="mascot-container">
+                    <div class="mascot-teacher">👋🦁</div>
+                    <div class="bubble-speech">ሰላም! Let's learn Amharic letters together!</div>
+                </div>
+                <h2>Explore the Magic of ፊደል!</h2>
+                <div class="action-cards">
+                    <button class="card-btn link-view" data-target="view-learn">
+                        <span class="btn-graphics">📚</span>
+                        <h3>Start Learning</h3>
+                        <p>Explore all alphabets</p>
+                    </button>
+                    <button class="card-btn link-view" data-target="view-quiz">
+                        <span class="btn-graphics">🎮</span>
+                        <h3>Play Quiz</h3>
+                        <p>Test your knowledge</p>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-learn" class="view">
+            <div class="view-header">
+                <button class="btn-back link-view" data-target="view-home">⬅ Back</button>
+                <h2>Choose a Letter / ፊደል ምረጥ</h2>
+            </div>
+            <div class="fidel-grid" id="fidel-grid-container">
+                </div>
+        </section>
+
+        <section id="view-details" class="view">
+            <div class="view-header">
+                <button class="btn-back link-view" data-target="view-learn">⬅ Back to List</button>
+                <h2 id="detail-title">Letter Details</h2>
+            </div>
+            <div class="details-layout">
+                <div class="detail-card animate-bounce">
+                    <div class="large-fidel" id="detail-fidel">ሀ</div>
+                    <div class="fidel-meta">
+                        <span id="detail-pronounce" class="badge">Ha</span>
+                        <h3 id="detail-example-word">ሀረግ (Harag)</h3>
+                        <span id="detail-example-meaning" class="meaning">🌿 Vine</span>
+                    </div>
+                    <button id="btn-audio-play" class="btn-action sound-btn">🔊 Listen</button>
+                    <button id="btn-speech-verify" class="btn-action mic-btn">🎙️ Speak & Verify</button>
+                    <div id="speech-feedback" class="speech-feedback"></div>
+                </div>
+
+                <div class="canvas-card">
+                    <h3>Trace the Letter / ፊደሉን ይጻፉ</h3>
+                    <div class="canvas-wrapper">
+                        <canvas id="tracing-canvas" width="320" height="320"></canvas>
+                    </div>
+                    <div class="canvas-controls">
+                        <button id="canvas-clear" class="btn-secondary">Clear</button>
+                        <button id="canvas-hint" class="btn-secondary">Toggle Guide</button>
+                        <button id="canvas-verify" class="btn-primary">Verify Layout</button>
+                    </div>
+                    <div id="canvas-feedback"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-quiz" class="view">
+            <div class="view-header">
+                <button class="btn-back link-view" data-target="view-home">⬅ Quit</button>
+                <h2>Fidel Challenge!</h2>
+            </div>
+            <div class="quiz-container">
+                <div class="quiz-question-box">
+                    <p>Which character matches the sound?</p>
+                    <div id="quiz-prompt-sound" class="quiz-audio-prompt">🔊 Play Sound</div>
+                </div>
+                <div class="quiz-options-grid" id="quiz-options-container">
+                    </div>
+                <div id="quiz-feedback" class="quiz-feedback-toast hidden"></div>
+            </div>
+        </section>
+    </main>
+
+    <div id="celebration-overlay" class="overlay hidden">
+        <div class="celebration-modal">
+            <h2>🎉 Amazing Job! 🎉</h2>
+            <p>You earned a new reward!</p>
+            <div class="reward-graphic">🏆</div>
+            <button id="close-celebration" class="btn-primary">Keep Going!</button>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
