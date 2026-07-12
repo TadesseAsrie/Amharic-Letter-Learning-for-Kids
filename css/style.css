@@ -312,3 +312,54 @@ button:hover { filter: brightness(0.9); }
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
 }
 .reward-graphic { font-size: 5rem; margin: 1.5rem 0; animation: bounce 1s infinite alternate; }
+
+/* Flashcard Flip Engine Styling */
+.flashcard-container {
+    text-align: center;
+    perspective: 1000px; /* Essential for 3D flip effect */
+}
+
+.flashcard {
+    width: 280px;
+    height: 380px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+    cursor: pointer;
+    margin: 1.5rem auto;
+}
+
+.flashcard.is-flipped {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden; /* Hides reverse side during rotation */
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+    border: 5px solid var(--secondary);
+}
+
+.card-front {
+    background: var(--bg-card);
+    font-size: 7rem;
+    font-weight: bold;
+    color: var(--primary);
+}
+
+.card-back {
+    background: #fff3e0;
+    transform: rotateY(180deg);
+    color: #2b2b2b;
+}
+
+#flashcard-graphic { font-size: 5rem; margin-bottom: 1rem; }
+.tap-hint { font-size: 0.9rem; color: #888; margin-top: 1rem; }
+.flashcard-controls { display: flex; justify-content: center; gap: 1rem; }
