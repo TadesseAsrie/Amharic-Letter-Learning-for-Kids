@@ -156,7 +156,6 @@ class FidelKidsApp {
     this.drawCanvasGuide();
   }
 
- 
   /* --- Interactive Canvas Writing & Tracing Engine --- */
   setupCanvas() {
     const canvas = document.getElementById("tracing-canvas");
@@ -301,21 +300,47 @@ class FidelKidsApp {
     ctx.restore();
   }
 
+  
   verifyUserDrawing() {
-    // Math algorithm to analyze vector accuracy patterns
     if (this.canvasState.drawnPoints.length < 5) {
-      document.getElementById("canvas-feedback").textContent =
-        "❌ Write something before verifying!";
-      return;
+      return; // Not enough drawn data to verify yet
     }
 
+    // 1. Reward the child for successful tracing
     this.state.userProgress.stars += 2;
     this.state.userProgress.coins += 5;
     this.saveProgress();
 
+    // 2. Display success feedback and pop the celebration modal
+    document.getElementById("canvas-feedback").className = "feedback-success";
     document.getElementById("canvas-feedback").textContent =
-      "🎉 Fantastic Shape Matching! +2 Stars";
+      "🎉 ኮከብ አግኝተሃል! Fantastic Tracing! +2 Stars";
     this.triggerCelebrationEffect();
+
+    // 3. Continuous Learning Flow Engine Hook
+    // Wait 1.5 seconds during the celebration, then automatically move to the next letter
+    setTimeout(() => {
+      this.loadNextLetterInSequence();
+    }, 1500);
+  }
+
+  loadNextLetterInSequence() {
+    if (!this.state.activeLetter) return;
+
+    // Find the index position of our current letter in the master alphabet array
+    const currentIndex = AMHARIC_ALPHABET.findIndex(
+      (item) => item.id === this.state.activeLetter.id,
+    );
+
+    // Calculate the next index, wrapping back around to 0 if they finish the alphabet
+    const nextIndex = (currentIndex + 1) % AMHARIC_ALPHABET.length;
+    const nextLetter = AMHARIC_ALPHABET[nextIndex];
+
+    // Safely clear out the feedback text before loading the next letter card
+    document.getElementById("canvas-feedback").textContent = "";
+
+    // Automatically re-initialize the view context with the next letter profile
+    this.loadLetterDetails(nextLetter);
   }
 
   /* --- Web Speech Synthesis & Recognition API Infrastructure --- */
