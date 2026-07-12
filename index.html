@@ -46,6 +46,35 @@
                         <h3>Play Quiz</h3>
                         <p>Test your knowledge</p>
                     </button>
+<button class="card-btn" id="btn-flashcards-mode">
+    <span class="btn-graphics">🃏</span>
+    <h3>Flashcards</h3>
+    <p>Flip and learn words</p>
+</button>
+
+<!-- Flashcard Overlay / Modal Container -->
+<div id="flashcard-modal" class="overlay hidden">
+    <div class="flashcard-container">
+        <button id="close-flashcard" class="btn-secondary">❌ Close</button>
+        <div class="flashcard" id="interactive-flashcard">
+            <!-- Front of Card -->
+            <div class="card-face card-front">
+                <span id="flashcard-letter">ሀ</span>
+                <p class="tap-hint">Tap to flip! 🔄</p>
+            </div>
+            <!-- Back of Card -->
+            <div class="card-face card-back">
+                <span id="flashcard-graphic">🌿</span>
+                <h3 id="flashcard-word">ሀረግ</h3>
+                <p id="flashcard-meaning">Vine</p>
+            </div>
+        </div>
+        <div class="flashcard-controls">
+            <button id="flash-prev" class="btn-primary">⬅️ Prev</button>
+            <button id="flash-next" class="btn-primary">Next ➡️</button>
+        </div>
+    </div>
+</div>
                 </div>
             </div>
         </section>
@@ -87,35 +116,7 @@
                 </div>
             </div>
         </section>
-        <button class="card-btn" id="btn-flashcards-mode">
-    <span class="btn-graphics">🃏</span>
-    <h3>Flashcards</h3>
-    <p>Flip and learn words</p>
-</button>
-
-<!-- Flashcard Overlay / Modal Container -->
-<div id="flashcard-modal" class="overlay hidden">
-    <div class="flashcard-container">
-        <button id="close-flashcard" class="btn-secondary">❌ Close</button>
-        <div class="flashcard" id="interactive-flashcard">
-            <!-- Front of Card -->
-            <div class="card-face card-front">
-                <span id="flashcard-letter">ሀ</span>
-                <p class="tap-hint">Tap to flip! 🔄</p>
-            </div>
-            <!-- Back of Card -->
-            <div class="card-face card-back">
-                <span id="flashcard-graphic">🌿</span>
-                <h3 id="flashcard-word">ሀረግ</h3>
-                <p id="flashcard-meaning">Vine</p>
-            </div>
-        </div>
-        <div class="flashcard-controls">
-            <button id="flash-prev" class="btn-primary">⬅️ Prev</button>
-            <button id="flash-next" class="btn-primary">Next ➡️</button>
-        </div>
-    </div>
-</div>
+        
 
         <section id="view-quiz" class="view">
             <div class="view-header">
