@@ -34,6 +34,7 @@ class FidelKidsApp {
     this.renderFidelGrid();
     this.setupCanvas();
     this.updateStatsUI();
+    this.initFlashcardEngine();
   }
 
   /* --- DOM Navigation & Application Layout Control Engine --- */
@@ -45,6 +46,8 @@ class FidelKidsApp {
         this.switchView(target);
       });
     });
+
+    // Remember to invoke: this.initFlashcardEngine(); in your app's init() constructor!
 
     // Interface Theme Configuration
     document.getElementById("theme-toggle").addEventListener("click", () => {
@@ -70,6 +73,62 @@ class FidelKidsApp {
       .addEventListener("click", () => {
         document.getElementById("celebration-overlay").classList.add("hidden");
       });
+  }
+  // Add inside your main FidelKidsApp class:
+  initFlashcardEngine() {
+    let currentCardIdx = 0;
+    const cardEl = document.getElementById("interactive-flashcard");
+    const modal = document.getElementById("flashcard-modal");
+
+    // Open Modal Trigger
+    document
+      .getElementById("btn-flashcards-mode")
+      ?.addEventListener("click", () => {
+        currentCardIdx = 0;
+        updateCardContent();
+        modal.classList.remove("hidden");
+      });
+
+    // Flip Toggle Trigger
+    cardEl.addEventListener("click", () => {
+      cardEl.classList.toggle("is-flipped");
+    });
+
+    // Navigation Triggers
+    document.getElementById("flash-next").addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevents flipping card when hitting button
+      cardEl.classList.remove("is-flipped");
+      setTimeout(() => {
+        currentCardIdx = (currentCardIdx + 1) % AMHARIC_ALPHABET.length;
+        updateCardContent();
+      }, 150);
+    });
+
+    document.getElementById("flash-prev").addEventListener("click", (e) => {
+      e.stopPropagation();
+      cardEl.classList.remove("is-flipped");
+      setTimeout(() => {
+        currentCardIdx =
+          (currentCardIdx - 1 + AMHARIC_ALPHABET.length) %
+          AMHARIC_ALPHABET.length;
+        updateCardContent();
+      }, 150);
+    });
+
+    document.getElementById("close-flashcard").addEventListener("click", () => {
+      modal.classList.add("hidden");
+      cardEl.classList.remove("is-flipped");
+    });
+
+    function updateCardContent() {
+      const item = AMHARIC_ALPHABET[currentCardIdx];
+      document.getElementById("flashcard-letter").textContent = item.letter;
+      document.getElementById("flashcard-graphic").textContent =
+        item.exampleGraphic;
+      document.getElementById("flashcard-word").textContent = item.exampleWord;
+      document.getElementById("flashcard-meaning").textContent =
+        item.exampleMeaning;
+    }
   }
 
   switchView(viewId) {
@@ -198,16 +257,7 @@ class FidelKidsApp {
       this.stopDrawingAndScheduleVerify(),
     );
 
-    // Control Panel Listeners
-    document.getElementById("canvas-clear").addEventListener("click", () => {
-      this.resetCanvas();
-      this.drawCanvasGuide();
-    });
-    document.getElementById("canvas-hint").addEventListener("click", () => {
-      this.canvasState.showGuide = !this.canvasState.showGuide;
-      this.resetCanvas();
-      this.drawCanvasGuide();
-    });
+   
   }
 
   startDrawing(x, y) {
@@ -300,7 +350,6 @@ class FidelKidsApp {
     ctx.restore();
   }
 
-  
   verifyUserDrawing() {
     if (this.canvasState.drawnPoints.length < 5) {
       return; // Not enough drawn data to verify yet
