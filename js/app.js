@@ -161,31 +161,44 @@ class FidelKidsApp {
     const canvas = document.getElementById("tracing-canvas");
     this.canvasState.ctx = canvas.getContext("2d");
 
-    // Mouse Listeners
+    // Auto-Verification Delay Timer Property
+    this.canvasState.autoVerifyTimer = null;
+
+    // Mouse Event Listeners
     canvas.addEventListener("mousedown", (e) =>
       this.startDrawing(e.offsetX, e.offsetY),
     );
     canvas.addEventListener("mousemove", (e) =>
       this.draw(e.offsetX, e.offsetY),
     );
-    canvas.addEventListener("mouseup", () => this.stopDrawing());
-    canvas.addEventListener("mouseleave", () => this.stopDrawing());
+    canvas.addEventListener("mouseup", () =>
+      this.stopDrawingAndScheduleVerify(),
+    );
+    canvas.addEventListener("mouseleave", () =>
+      this.stopDrawingAndScheduleVerify(),
+    );
 
-    // Touch Listeners (Mobile Interaction Support)
+    // Touch Event Listeners (Mobile Interaction Support)
     canvas.addEventListener("touchstart", (e) => {
       const rect = canvas.getBoundingClientRect();
       const touch = e.touches[0];
       this.startDrawing(touch.clientX - rect.left, touch.clientY - rect.top);
     });
-    canvas.addEventListener("touchmove", (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const touch = e.touches[0];
-      this.draw(touch.clientX - rect.left, touch.clientY - rect.top);
-      e.preventDefault();
-    });
-    canvas.addEventListener("touchend", () => this.stopDrawing());
+    canvas.addEventListener(
+      "touchmove",
+      (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const touch = e.touches[0];
+        this.draw(touch.clientX - rect.left, touch.clientY - rect.top);
+        e.preventDefault();
+      },
+      { passive: false },
+    );
+    canvas.addEventListener("touchend", () =>
+      this.stopDrawingAndScheduleVerify(),
+    );
 
-    // Button Controllers Implementation
+    // Control Panel Listeners
     document.getElementById("canvas-clear").addEventListener("click", () => {
       this.resetCanvas();
       this.drawCanvasGuide();
@@ -195,9 +208,48 @@ class FidelKidsApp {
       this.resetCanvas();
       this.drawCanvasGuide();
     });
-    document
-      .getElementById("canvas-verify")
-      .addEventListener("click", () => this.verifyUserDrawing());
+  }
+
+  startDrawing(x, y) {
+    // Clear any pending verification timers if the child starts drawing another stroke quickly
+    if (this.canvasState.autoVerifyTimer) {
+      clearTimeout(this.canvasState.autoVerifyTimer);
+    }
+
+    this.canvasState.isDrawing = true;
+    this.canvasState.ctx.beginPath();
+    this.canvasState.ctx.moveTo(x, y);
+    this.canvasState.ctx.lineWidth = 14;
+    this.canvasState.ctx.lineCap = "round";
+    this.canvasState.ctx.strokeStyle = "#4caf50";
+    this.canvasState.drawnPoints.push({ x, y });
+  }
+
+  draw(x, y) {
+    if (!this.canvasState.isDrawing) return;
+    this.canvasState.ctx.lineTo(x, y);
+    this.canvasState.ctx.stroke();
+    this.canvasState.drawnPoints.push({ x, y });
+  }
+
+  stopDrawingAndScheduleVerify() {
+    if (!this.canvasState.isDrawing) return;
+    this.canvasState.isDrawing = false;
+
+    // Wait 250ms after input stops. This gives kids time to start a multi-stroke letter (like ለ or መ)
+    this.canvasState.autoVerifyTimer = setTimeout(() => {
+      this.verifyUserDrawing();
+    }, 250);
+  }
+
+  resetCanvas() {
+    if (this.canvasState.autoVerifyTimer) {
+      clearTimeout(this.canvasState.autoVerifyTimer);
+    }
+    const canvas = document.getElementById("tracing-canvas");
+    this.canvasState.ctx.clearRect(0, 0, canvas.width, canvas.height);
+    this.canvasState.drawnPoints = [];
+    document.getElementById("canvas-feedback").textContent = "";
   }
 
   startDrawing(x, y) {
@@ -248,21 +300,47 @@ class FidelKidsApp {
     ctx.restore();
   }
 
+  
   verifyUserDrawing() {
-    // Math algorithm to analyze vector accuracy patterns
     if (this.canvasState.drawnPoints.length < 5) {
-      document.getElementById("canvas-feedback").textContent =
-        "❌ Write something before verifying!";
-      return;
+      return; // Not enough drawn data to verify yet
     }
 
+    // 1. Reward the child for successful tracing
     this.state.userProgress.stars += 2;
     this.state.userProgress.coins += 5;
     this.saveProgress();
 
+    // 2. Display success feedback and pop the celebration modal
+    document.getElementById("canvas-feedback").className = "feedback-success";
     document.getElementById("canvas-feedback").textContent =
-      "🎉 Fantastic Shape Matching! +2 Stars";
+      "🎉 ኮከብ አግኝተሃል! Fantastic Tracing! +2 Stars";
     this.triggerCelebrationEffect();
+
+    // 3. Continuous Learning Flow Engine Hook
+    // Wait 1.5 seconds during the celebration, then automatically move to the next letter
+    setTimeout(() => {
+      this.loadNextLetterInSequence();
+    }, 1500);
+  }
+
+  loadNextLetterInSequence() {
+    if (!this.state.activeLetter) return;
+
+    // Find the index position of our current letter in the master alphabet array
+    const currentIndex = AMHARIC_ALPHABET.findIndex(
+      (item) => item.id === this.state.activeLetter.id,
+    );
+
+    // Calculate the next index, wrapping back around to 0 if they finish the alphabet
+    const nextIndex = (currentIndex + 1) % AMHARIC_ALPHABET.length;
+    const nextLetter = AMHARIC_ALPHABET[nextIndex];
+
+    // Safely clear out the feedback text before loading the next letter card
+    document.getElementById("canvas-feedback").textContent = "";
+
+    // Automatically re-initialize the view context with the next letter profile
+    this.loadLetterDetails(nextLetter);
   }
 
   /* --- Web Speech Synthesis & Recognition API Infrastructure --- */
