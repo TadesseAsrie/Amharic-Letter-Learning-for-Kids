@@ -23,6 +23,7 @@ class FidelKidsApp {
       ctx: null,
       drawnPoints: [],
       showGuide: true,
+      brushColor: "#4caf50",
     };
 
     this.init();
@@ -256,6 +257,15 @@ class FidelKidsApp {
     canvas.addEventListener("touchend", () =>
       this.stopDrawingAndScheduleVerify(),
     );
+    document.querySelectorAll(".color-pellet").forEach((pellet) => {
+      pellet.addEventListener("click", (e) => {
+        document
+          .querySelectorAll(".color-pellet")
+          .forEach((p) => p.classList.remove("active"));
+        e.target.classList.add("active");
+        this.canvasState.brushColor = e.target.getAttribute("data-color");
+      });
+    });
 
    
   }
@@ -273,6 +283,7 @@ class FidelKidsApp {
     this.canvasState.ctx.lineCap = "round";
     this.canvasState.ctx.strokeStyle = "#4caf50";
     this.canvasState.drawnPoints.push({ x, y });
+    this.canvasState.ctx.strokeStyle = this.canvasState.brushColor;
   }
 
   draw(x, y) {

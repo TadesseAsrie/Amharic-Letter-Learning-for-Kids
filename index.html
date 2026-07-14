@@ -105,9 +105,16 @@
                     <button id="btn-speech-verify" class="btn-action mic-btn">🎙️ Speak & Verify</button>
                     <div id="speech-feedback" class="speech-feedback"></div>
                 </div>
+               
 
-                <div class="canvas-card">
-                    <h3>Trace the Letter / ፊደሉን ይጻፉ</h3>
+                <div class="canvas-card"> <h3>Trace the Letter / ፊደሉን ይጻፉ</h3><div class="brush-palette">
+    <p>Select Ink Color: </p>
+    <button class="color-pellet active" data-color="#4caf50" style="background: #4caf50;" aria-label="Green"></button>
+    <button class="color-pellet" data-color="#e91e63" style="background: #e91e63;" aria-label="Pink"></button>
+    <button class="color-pellet" data-color="#00bcd4" style="background: #00bcd4;" aria-label="Cyan"></button>
+    <button class="color-pellet" data-color="#ff9800" style="background: #ff9800;" aria-label="Orange"></button>
+</div>
+                    
                     <div class="canvas-wrapper">
                         <canvas id="tracing-canvas" width="320" height="320"></canvas>
                     </div>
