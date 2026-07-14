@@ -31,11 +31,13 @@ class FidelKidsApp {
 
   init() {
     this.loadProgress();
+    this.verifyAndProcessDailyStreak();
     this.initDOMEvents();
     this.renderFidelGrid();
     this.setupCanvas();
     this.updateStatsUI();
     this.initFlashcardEngine();
+    
   }
 
   /* --- DOM Navigation & Application Layout Control Engine --- */
@@ -162,6 +164,7 @@ class FidelKidsApp {
       }
     }
   }
+ 
 
   saveProgress() {
     localStorage.setItem(
@@ -170,7 +173,38 @@ class FidelKidsApp {
     );
     this.updateStatsUI();
   }
+ verifyAndProcessDailyStreak() {
+    const today = new Date().toDateString();
+    const lastActiveDate = localStorage.getItem("fidel_kids_last_active_date");
 
+    if (!lastActiveDate) {
+      // First execution baseline
+      this.state.userProgress.streak = 1;
+    } else {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      if (lastActiveDate === today) {
+        // Already logged in today, preserve current streak value
+      } else if (lastActiveDate === yesterday.toDateString()) {
+        // Logged in exactly consecutive day, increment!
+        this.state.userProgress.streak += 1;
+
+        // Give streak bonus award
+        const bonusCoins = this.state.userProgress.streak * 5;
+        this.state.userProgress.coins += bonusCoins;
+        alert(
+          `🔥 ${this.state.userProgress.streak} Day Learning Streak Bonus! Earned +${bonusCoins} Coins!`,
+        );
+      } else {
+        // Streak broken, reset back to baseline sequence tracker
+        this.state.userProgress.streak = 1;
+      }
+    }
+
+    localStorage.setItem("fidel_kids_last_active_date", today);
+    this.saveProgress();
+  }
   updateStatsUI() {
     document.getElementById("stat-streak").textContent =
       this.state.userProgress.streak;
@@ -180,6 +214,10 @@ class FidelKidsApp {
       this.state.userProgress.stars;
     document.getElementById("stat-lives").textContent =
       this.state.userProgress.lives;
+      document.getElementById("stat-streak").textContent =
+        this.state.userProgress.streak;
+      document.getElementById("stat-coins").textContent =
+        this.state.userProgress.coins;
   }
 
   /* --- Learning Matrix Grid Generation Subsystem --- */
@@ -266,8 +304,6 @@ class FidelKidsApp {
         this.canvasState.brushColor = e.target.getAttribute("data-color");
       });
     });
-
-   
   }
 
   startDrawing(x, y) {
