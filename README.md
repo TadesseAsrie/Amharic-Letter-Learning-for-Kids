@@ -138,6 +138,7 @@ This application helps children:
 - Additional Ethiopian language support
 - Achievement certificates
 - Advanced learning analytics
+- payment integration 
 
 
 
